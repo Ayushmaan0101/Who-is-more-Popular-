@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Who is More Popular?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .game-container {
+            background-color: #000000;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: #FFFFFF;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .score {
+            font-size: 18px;
+            color: #FFFFFF;
+        }
+
+        .accounts {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .account {
+            background-color: #333333;
+            padding: 10px;
+            border: 1px solid #666666;
+            border-radius: 5px;
+            color: #FFFFFF;
+        }
+
+        .vs {
+            font-size: 24px;
+            color: #FFFFFF;
+        }
+
+        .choices {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            background-color: #FFD700;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #game-over-message {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>Who is More Popular?</h1>
+        <div class="score">Score: <span id="score">0</span></div>
+        <div class="accounts">
+            <div id="accountA" class="account"></div>
+            <div class="vs">VS</div>
+            <div id="accountB" class="account"></div>
+        </div>
+        <div class="choices">
+            <button id="btnA">A</button>
+            <button id="btnB">B</button>
+        </div>
+        <div id="game-over-message" style="display: none;">
+            Game Over! Your final score is <span id="final-score">0</span>.
+            <button id="replay-button">Replay</button>
+        </div>
+    </div>
+    <script>
+        const data = [
+            {
+                name: 'Instagram',
+                follower_count: 346,
+                description: 'Social media platform',
+                country: 'United States',
+            },
+            {
+                name: 'Selena Gomez',
+                follower_count: 174,
+                description: 'Musician and actress',
+                country: 'United States',
+            },
+            {
+                name: 'Kylie Jenner',
+                follower_count: 172,
+                description: 'Reality TV personality and businesswoman',
+                country: 'United States',
+            },
+            {
+                name: 'Kim Kardashian',
+                follower_count: 167,
+                description: 'Reality TV personality and businesswoman',
+                country: 'United States',
+            },
+            {
+                name: 'Lionel Messi',
+                follower_count: 149,
+                description: 'Footballer',
+                country: 'Argentina',
+            },
+            {
+                name: 'Beyoncé',
+                follower_count: 145,
+                description: 'Musician',
+                country: 'United States',
+            },
+            {
+                name: 'Neymar',
+                follower_count: 138,
+                description: 'Footballer',
+                country: 'Brazil',
+            },
+            {
+                name: 'National Geographic',
+                follower_count: 135,
+                description: 'Magazine',
+                country: 'United States',
+            },
+            {
+                name: 'Justin Bieber',
+                follower_count: 133,
+                description: 'Musician',
+                country: 'Canada',
+            },
+            {
+                name: 'Taylor Swift',
+                follower_count: 131,
+                description: 'Musician',
+                country: 'United States',
+            },
+            {
+                name: 'Kendall Jenner',
+                follower_count: 127,
+                description: 'Reality TV personality and Model',
+                country: 'United States',
+            },
+            {
+                name: 'Jennifer Lopez',
+                follower_count: 119,
+                description: 'Musician and actress',
+                country: 'United States',
+            },
+            {
+                name: 'Nicki Minaj',
+                follower_count: 113,
+                description: 'Musician',
+                country: 'Trinidad and Tobago',
+            },
+            {
+                name: 'Nike',
+                follower_count: 109,
+                description: 'Sportswear multinational',
+                country: 'United States',
+            },
+            {
+                name: 'Khloé Kardashian',
+                follower_count: 108,
+                description: 'Reality TV personality and businesswoman',
+                country: 'United States',
+            },
+            {
+                name: 'Miley Cyrus',
+                follower_count: 107,
+                description: 'Musician and actress',
+                country: 'United States',
+            },
+            {
+                name: 'Kourtney Kardashian',
+                follower_count: 90,
+                description: 'Reality TV personality',
+                country: 'United States',
+            },
+            {
+                name: 'Kevin Hart',
+                follower_count: 89,
+                description: 'Comedian and actor',
+                country: 'United States',
+            },
+            {
+                name: 'Ellen DeGeneres',
+                follower_count: 87,
+                description: 'Comedian',
+                country: 'United States',
+            },
+            {
+                name: 'Real Madrid CF',
+                follower_count: 86,
+                description: 'Football club',
+                country: 'Spain',
+            },
+            {
+                name: 'FC Barcelona',
+                follower_count: 85,
+                description: 'Football club',
+                country: 'Spain',
+            },
+            {
+                name: 'Rihanna',
+                follower_count: 81,
+                description: 'Musician and businesswoman',
+                country: 'Barbados',
+            },
+            {
+                name: 'Demi Lovato',
+                follower_count: 80,
+                description: 'Musician and actress',
+                country: 'United States',
+            },
+            {
+                name: "Victoria's Secret",
+                follower_count: 69,
+                description: 'Lingerie brand',
+                country: 'United States',
+            },
+            {
+                name: 'Zendaya',
+                follower_count: 68,
+                description: 'Actress and musician',
+                country: 'United States',
+            },
+            {
+                name: 'Shakira',
+                follower_count: 66,
+                description: 'Musician',
+                country: 'Colombia',
+            },
+            {
+                name: 'Drake',
+                follower_count: 65,
+                description: 'Musician',
+                country: 'Canada',
+            },
+            {
+                name: 'Chris Brown',
+                follower_count: 64,
+                description: 'Musician',
+                country: 'United States',
+            },
+            {
+                name: 'LeBron James',
+                follower_count: 63,
+                description: 'Basketball player',
+                country: 'United States',
+            },
+            {
+                name: 'Vin Diesel',
+                follower_count: 62,
+                description: 'Actor',
+                country: 'United States',
+            },
+            {
+                name: 'Cardi B',
+                follower_count: 67,
+                description: 'Musician',
+                country: 'United States',
+            },
+            {
+                name: 'David Beckham',
+                follower_count: 82,
+                description: 'Footballer',
+                country: 'United Kingdom',
+            },
+            {
+                name: 'Billie Eilish',
+                follower_count: 61,
+                description: 'Musician',
+                country: 'United States',
+            },
+            {
+                name: 'Justin Timberlake',
+                follower_count: 59,
+                description: 'Musician and actor',
+                country: 'United States',
+            },
+            {
+                name: 'UEFA Champions League',
+                follower_count: 58,
+                description: 'Club football competition',
+                country: 'Europe',
+            },
+            {
+                name: 'NASA',
+                follower_count: 56,
+                description: 'Space agency',
+                country: 'United States',
+            },
+            {
+                name: 'Emma Watson',
+                follower_count: 56,
+                description: 'Actress',
+                country: 'United Kingdom',
+            },
+            {
+                name: 'Shawn Mendes',
+                follower_count: 57,
+                description: 'Musician',
+                country: 'Canada',
+            },
+            {
+                name: 'Virat Kohli',
+                follower_count: 55,
+                description: 'Cricketer',
+                country: 'India',
+            },
+            {
+                name: 'Gigi Hadid',
+                follower_count: 54,
+                description: 'Model',
+                country: 'United States',
+            },
+            {
+                name: 'Priyanka Chopra Jonas',
+                follower_count: 53,
+                description: 'Actress and musician',
+                country: 'India',
+            },
+            {
+                name: '9GAG',
+                follower_count: 52,
+                description: 'Social media platform',
+                country: 'China',
+            },
+            {
+                name: 'Ronaldinho',
+                follower_count: 51,
+                description: 'Footballer',
+                country: 'Brazil',
+            },
+            {
+                name: 'Maluma',
+                follower_count: 50,
+                description: 'Musician',
+                country: 'Colombia',
+            },
+            {
+                name: 'Camila Cabello',
+                follower_count: 49,
+                description: 'Musician',
+                country: 'Cuba',
+            },
+            {
+                name: 'NBA',
+                follower_count: 47,
+                description: 'Club Basketball Competition',
+                country: 'United States',
+            },
+        ];
+
+        let score = 0;
+        let accountA, accountB;
+
+        const scoreElement = document.getElementById('score');
+        const accountAElement = document.getElementById('accountA');
+        const accountBElement = document.getElementById('accountB');
+        const gameOverMessage = document.getElementById('game-over-message');
+        const replayButton = document.getElementById('replay-button');
+
+        function getRandomAccount() {
+            return data[Math.floor(Math.random() * data.length)];
+        }
+
+        function displayAccounts() {
+            accountA = getRandomAccount();
+            accountB = getRandomAccount();
+
+            accountAElement.textContent = accountA.name;
+            accountBElement.textContent = accountB.name;
+        }
+
+        function checkAnswer(chosenAccount) {
+            if (accountA.follower_count === accountB.follower_count) {
+                return chosenAccount === 'A' || chosenAccount === 'B';
+            }
+
+            if (accountA.follower_count > accountB.follower_count) {
+                return chosenAccount === 'A';
+            } else {
+                return chosenAccount === 'B';
+            }
+        }
+
+        function updateScore(isCorrect) {
+            if (isCorrect) {
+                score++;
+                scoreElement.textContent = score;
+            } else {
+                gameOverMessage.style.display = 'block';
+                document.getElementById('final-score').textContent = score;
+                document.getElementById('btnA').disabled = true;
+                document.getElementById('btnB').disabled = true;
+                replayButton.style.display = 'block';
+            }
+        }
+
+        function initGame() {
+            score = 0;
+            scoreElement.textContent = score;
+            gameOverMessage.style.display = 'none';
+            document.getElementById('btnA').disabled = false;
+            document.getElementById('btnB').disabled = false;
+            replayButton.style.display = 'none';
+            displayAccounts();
+        }
+
+        // Initialize the game
+        initGame();
+
+        replayButton.addEventListener('click', function() {
+            initGame();
+        });
+
+        document.getElementById('btnA').addEventListener('click', function() {
+            const isCorrect = checkAnswer('A');
+            updateScore(isCorrect);
+            displayAccounts();
+        });
+
+        document.getElementById('btnB').addEventListener('click', function() {
+            const isCorrect = checkAnswer('B');
+            updateScore(isCorrect);
+            displayAccounts();
+        });
+    </script>
+</body>
+</html>
